@@ -1,0 +1,105 @@
+﻿@page "/"
+@using XUnitDemo.Blazor.Data
+
+<PageTitle>Calculator</PageTitle>
+
+<strong style="margin:2em auto">Answer: @answer</strong>
+
+<div style="margin:2em auto">
+    <label>number 1</label>
+    <input type="number" @bind-value="@a" @bind-value:event="oninput" />
+
+</div>
+
+<div style="margin:2em auto">
+    <label>number 2</label>
+    <input type="number" @bind-value="@b" @bind-value:event="oninput" />
+</div>
+
+
+<button style="margin:2em auto" @onclick="(() => Add())">Add</button>
+
+<button style="margin:2em auto" @onclick="(() => Subtract())">Subtract</button>
+
+<button style="margin:2em auto" @onclick="(() => Multiply())">Multiply</button>
+
+<button style="margin:2em auto" @onclick="(() => Divide())">Divide</button>
+
+
+<label>People</label>
+<ul>
+    @foreach (var person in people)
+    {
+        <li>@person.FirstName @person.LastName</li>
+    }
+</ul>
+<div style="margin:2em auto">
+    <label>First Name</label>
+    <input type="text" @bind-value="@firstName" @bind-value:event="oninput" />
+
+</div>
+
+<div style="margin:2em auto">
+    <label>Last Name</label>
+    <input type="text" @bind-value="@lastName" @bind-value:event="oninput" />
+</div>
+
+<button style="margin:2em auto" @onclick="(() => AddPerson())">Add Person</button>
+
+
+@code {
+
+    double a;
+    double b;
+    double answer;
+    string firstName = "";
+    string lastName = "";
+    List<PersonModel> people = new();
+
+    protected override void OnInitialized()
+    {
+        people = DataAccess.GetAllPeople();
+    }
+
+    public void Add()
+    {
+        answer = Calculator.Add(a, b);
+
+        a = 0;
+        b = 0;
+    }
+
+    public void Subtract()
+    {
+        answer = Calculator.Subtract(a, b);
+
+        a = 0;
+        b = 0;
+    }
+
+    public void Multiply()
+    {
+        answer = Calculator.Multiply(a, b);
+
+        a = 0;
+        b = 0;
+    }
+
+    public void Divide()
+    {
+        answer = Calculator.Divide(a, b);
+
+        a = 0;
+        b = 0;
+    }
+
+    public void AddPerson()
+    {
+        DataAccess.AddNewPerson(new PersonModel { FirstName = firstName, LastName = lastName });
+
+        people = DataAccess.GetAllPeople();
+
+        firstName = "";
+        lastName = "";
+    }
+}
